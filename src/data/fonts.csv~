@@ -1,0 +1,4 @@
+name   , path              , fontName        , size , thickness
+shnm12 , bdfShnmGothic.ttf , BDF東雲ゴシック , 12   , 1
+shnm14 , bdfShnmGothic.ttf , BDF東雲ゴシック , 14   , 1
+shnm16 , bdfShnmGothic.ttf , BDF東雲ゴシック , 16   , 1

@@ -1,0 +1,97 @@
+
+Publics by name		module
+_AES_Close                       TST2FISH
+_AES_EndSection                  TST2FISH
+_AES_FileIO                      TST2FISH
+_AES_printf                      TST2FISH
+_AES_PutBytes                    TST2FISH
+_AES_PutFileHeader               TST2FISH
+_AES_Sanity_Check                TST2FISH
+_AES_Test_CBC_D_MCT              TST2FISH
+_AES_Test_CBC_E_MCT              TST2FISH
+_AES_Test_ECB_D_MCT              TST2FISH
+_AES_Test_ECB_E_MCT              TST2FISH
+_AES_Test_Intermediate           TST2FISH
+_AES_Test_TBL                    TST2FISH
+_AES_Test_VK                     TST2FISH
+_AES_Test_VT                     TST2FISH
+_blockDecrypt                    TWOFISH
+_blockEncrypt                    TWOFISH
+_cipherInit                      TWOFISH
+_ClearTestData                   TST2FISH
+_CLK_MHZ                         TST2FISH
+_CLKS_BYTE                       TST2FISH
+_CompilerName                    TST2FISH
+_debug                           TST2FISH
+_Debug6805                       TST2FISH
+_debugCompile                    TWOFISH
+_DebugIO                         TST2FISH
+_debugTD                         TST2FISH
+_f32                             TWOFISH
+_FatalError                      TST2FISH
+_filePath                        TST2FISH
+_FMT_LOG                         TST2FISH
+_GetTimer                        TST2FISH
+_GiveHelp                        TST2FISH
+_Here                            TST2FISH
+_main                            TST2FISH
+_makeKey                         TWOFISH
+_mctInner                        TST2FISH
+_mctOuter                        TST2FISH
+_modeString                      TWOFISH
+_moduleDescription               TWOFISH
+_numRounds                       TWOFISH
+_P8x8                            TWOFISH
+_ParseArgFile                    TST2FISH
+_ParseHexDword                   TWOFISH
+_quietVerify                     TST2FISH
+_Rand                            TST2FISH
+_randBits                        TST2FISH
+_reKey                           TWOFISH
+_RS_MDS_Encode                   TWOFISH
+_SetRand                         TST2FISH
+_ShowHex                         TST2FISH
+_ShowParams                      TST2FISH
+_tabEnable                       TWOFISH
+_TableOp                         TWOFISH
+_timeIterCnt                     TST2FISH
+_TimeOps                         TST2FISH
+_useAsm                          TST2FISH
+_verbose                         TST2FISH
+_verify                          TST2FISH
+
+
+Publics by module
+TST2FISH
+	_GiveHelp                         _AES_EndSection
+	_mctInner                         _main
+	_Here                             _GetTimer
+	_ParseArgFile                     _FMT_LOG
+	_AES_Close                        _FatalError
+	_mctOuter                         _quietVerify
+	_timeIterCnt                      _Rand
+	_verbose                          _useAsm
+	_TimeOps                          _ShowParams
+	_DebugIO                          _ShowHex
+	_SetRand                          _randBits
+	_debugTD                          _filePath
+	_AES_Test_CBC_D_MCT               _Debug6805
+	_AES_Test_ECB_E_MCT               _AES_Test_ECB_D_MCT
+	_AES_Test_CBC_E_MCT               _AES_Sanity_Check
+	_AES_Test_TBL                     _AES_PutFileHeader
+	_AES_PutBytes                     _AES_printf
+	_AES_FileIO                       _AES_Test_Intermediate
+	_verify                           _AES_Test_VK
+	_ClearTestData                    _CLK_MHZ
+	_CLKS_BYTE                        _CompilerName
+	_AES_Test_VT                      _debug
+
+TWOFISH
+	_f32                              _TableOp
+	_tabEnable                        _moduleDescription
+	_RS_MDS_Encode                    _cipherInit
+	_ParseHexDword                    _reKey
+	_numRounds                        _debugCompile
+	_makeKey                          _modeString
+	_blockDecrypt                     _blockEncrypt
+	_P8x8                           

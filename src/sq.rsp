@@ -1,0 +1,16 @@
+-op
+-ID:\programs\dmd2\src\phobos\
+-ID:\programs\dmd2\src\druntime\import\
+-ID:\documents\program\stardust\src\
+-ID:\documents\program\stardust\src\mylib\
+-ID:\documents\program\stardust\src\squirrel\
+sq.d
+mylib\squirrel.d
+squirrel\all.d
+squirrel\sqstdaux.d
+squirrel\squirrel.d
+squirrel\sqstdblob.d
+squirrel\sqstdio.d
+squirrel\sqstdmath.d
+squirrel\sqstdstring.d
+squirrel\sqstdsystem.d

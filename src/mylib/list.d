@@ -1,0 +1,838 @@
+module mylib.list;
+import std.stdio;
+import std.conv;
+
+/// 双方向リスト
+class List(T){
+    /// リストの長さ
+    pure const abstract uint length();
+    /// リストの長さ
+    pure const final uint size(){return this.length();}
+    /// foreach用
+    abstract int opApply(int delegate(ref T) dg);
+    /// foreach用
+    abstract int opApply(int delegate(ref uint, ref T) dg);
+    /// foreach_reverse用
+    abstract int opApplyReverse(int delegate(ref T) dg);
+    /// foreach_reverse用
+    abstract int opApplyReverse(int delegate(ref uint, ref T) dg);
+    /// リストが空っぽか？
+    pure const abstract bool empty();
+    /// リストが空っぽか？
+    pure const final bool empty_(){return this.empty();}
+    /// 先頭にデータを追加
+    abstract void pushFront(T data);
+    /// 後ろにデータを追加
+    abstract void pushBack(T data);
+    /// 先頭のデータをひとつ削除
+    abstract T popFront();
+    /// 後ろの要素をひとつ削除
+    abstract T popBack();
+    /// 先頭のデータを取得
+    abstract T front_();
+    /// 後ろのデータを取得
+    abstract T back_();
+    /// 全ての要素を削除する
+    /// See_also:
+    ///     erase()
+    abstract void clear();
+    /// 全ての要素を削除する
+    /// See_also:
+    ///     clear()
+    final void erase(){
+        this.clear();
+    }
+    final void extend(List!T l2){
+        foreach(d; l2){
+            this.pushBack(d);
+        }
+    }
+    /// con(n) = trueとなる要素を削除する
+    /// See_also:
+    ///     leave
+    abstract void remove(bool delegate(T) con);
+    /// con(n) = falseとなる要素を削除する
+    /// See_also:
+    ///     remove
+    abstract void leave(bool delegate(T) con);
+    /// 全ての要素にfuncを適用する
+    final void filter(S)(S delegate(T) func){
+        foreach(d; this){
+            func(d);
+        }
+    }
+    /// con(n) = trueとなる要素にfuncを適用する
+    final void filter(S)(S delegate(T) func, bool delegate(T) con){
+        foreach(d; this){
+            if(con(d)){
+                func(d);
+            }
+        }
+    }
+    /// 文字列に変換
+    override abstract string toString();
+}
+
+/// 可変長双方向リスト(普通のリスト)
+class VariableList(T) : List!(T){
+    Iterator _head   = null;
+    Iterator _toe    = null;
+    uint     _length = 0;
+    this(){
+        _head = null;
+        _toe = null;
+        _length = 0;
+    }
+    // invariant用
+    private int _getLength(){
+        int __getLength(Iterator iteHead){
+            if(iteHead is null){
+                return 0;
+            }else{
+                return 1+__getLength(iteHead.next);
+            }
+        }
+        return __getLength(_head);
+    }
+    invariant(){
+        //writefln(_length, _getLength());
+        //assert(_length == _getLength());
+        assert((_head is null) == (_toe is null));
+        //assert((_head is null) == _empty());
+        //assert((_length==0) == _empty());
+    }
+    /// リストの長さ
+    pure const override uint length(){
+        return _length;
+    }
+        
+    /// foreach用
+    override int opApply(int delegate(ref T) dg){
+        int _foreach(Iterator iteHead){
+            if(iteHead is null){
+                return 0;
+            }else{
+                int res = dg(iteHead.data);
+                if(res == 0){
+                    return _foreach(iteHead.next);
+                }else{
+                    return res;
+                }
+            }
+        }
+        return _foreach(_head);
+    }
+    /// foreach用
+    override int opApply(int delegate(ref uint, ref T) dg){
+        int _foreach(uint i, Iterator iteHead){
+            if(iteHead is null){
+                return 0;
+            }else{
+                int res = dg(i, iteHead.data);
+                if(res == 0){
+                    return _foreach(i+1, iteHead.next);
+                }else{
+                    return res;
+                }
+            }
+        }
+        return _foreach(0, _head);
+    }
+    /// foreach_reverse用
+    override int opApplyReverse(int delegate(ref T) dg){
+        int _foreach(Iterator iteToe){
+            if(iteToe is null){
+                return 0;
+            }else{
+                const int res = dg(iteToe.data);
+                if(res==0){
+                    return _foreach(iteToe.prev);
+                }else{
+                    return res;
+                }
+            }
+        }
+        return _foreach(_toe);
+    }
+    /// foreach_reverse用
+    override int opApplyReverse(int delegate(ref uint, ref T) dg){
+        int _foreach(uint i, Iterator iteToe){
+            if(iteToe is null){
+                return 0;
+            }else{
+                const int res = dg(i, iteToe.data);
+                if(res==0){
+                    return _foreach(i-1, iteToe.prev);
+                }else{
+                    return res;
+                }
+            }
+        }
+        return _foreach(this.length-1, this._toe);
+    }
+    private bool _empty(){
+        return _length == 0;
+    }
+    /// リストが空っぽか？
+    pure const override bool empty(){
+        return _length == 0;
+    }
+    /// 先頭にデータを追加
+    override void pushFront(T data){
+        Iterator newIte = new Iterator(data, null, _head);
+        if(_toe is null){
+            _head = newIte;
+            _toe  = newIte;
+        }
+        else{
+            _head.prev = newIte;
+        }
+        _head = newIte;
+        _length++;
+    }
+    /// 後ろにデータを追加
+    override void pushBack(T data){
+        Iterator newIte = new Iterator(data, _toe, null);
+        if(_toe is null){
+            _head = newIte;
+            _toe  = newIte;
+        }
+        else{
+            _toe.next = newIte;
+        }
+        _toe = newIte;
+        _length++;
+    }
+    /// 先頭のデータをひとつ削除
+    override T popFront(){
+        if(empty_()){throw new Exception("List.popFront");}
+        Iterator resIte = _head;
+        assert(resIte !is null);
+        _head = resIte.next;
+        if(_head is null){ //空っぽになりました
+            assert(this._length == 1, text(this._length));
+            this._toe = null;
+        }else{
+            _head.prev = null;
+        }
+        _length--;
+        return resIte.data;
+    }
+    /// 後ろの要素をひとつ削除
+    override T popBack(){
+        if(empty_()){throw new Exception("List.popBack");}
+        Iterator resIte = _toe;
+        _toe = resIte.prev;
+        _toe.next = null;
+        _length--;
+        return resIte.data;
+    }
+    /// 先頭のデータを取得
+    override T front_(){
+        return _head.data;
+    }
+    /// 後ろのデータを取得
+    override T back_(){
+        return _toe.data;
+    }
+    //遅い
+    /+
+    T opIndex(int i){
+        assert(i>=0 && i<_length);
+        if(!(i>=0 && i<_length)){
+            throw new Exception("List.opIndex index="~to!(string)(i)
+                    ~", length="~to!(string)(_length));
+        }
+        T _search(Iterator head, int i){
+            if(head is null){
+                throw new Exception("List.opIndex");
+            }
+            if(i==0){
+                return head.data;
+            }else{
+                return _search(head.next, i-1);
+            }
+        }
+        T _search_reverse(Iterator toe, int i){
+            if(toe is null){
+                throw new Exception("List.opIndex");
+            }
+            if(i==0){
+                return toe.data;
+            }else{
+                return _search_reverse(toe.prev, i-1);
+            }
+        }
+        if(i<_length/2){
+            return _search(_head, i);
+        }else{
+            return _search_reverse(_toe, _length-i);
+        }
+    }
+    +/
+    /// 全ての要素を削除する
+    /// See_also:
+    ///     erase()
+    override void clear(){
+        _head = null;
+        _toe  = null;
+        _length = 0;
+    }
+    /// 全ての要素を削除する
+    /// See_also:
+    ///     clear()
+    //void erase(){
+    //    this.clear();
+    //}
+    /// con(n) = trueとなる要素を削除する
+    /// See_also:
+    ///     leave
+    override void remove(bool delegate(T) con){
+        void _remove(Iterator head){
+            if(head is null){
+                return;
+            }else{
+                if(con(head.data)){
+                    _pop(head);
+                }
+                _remove(head.next);
+            }
+        }
+        _remove(this._head);
+    }
+    /// con(n) = falseとなる要素を削除する
+    /// See_also:
+    ///     remove
+    override void leave(bool delegate(T) con){
+        void _leave(Iterator head){
+            if(head is null){
+                return;
+            }else{
+                if(!con(head.data)){
+                    _pop(head);
+                }
+                _leave(head.next);
+            }
+        }
+        _leave(this._head);
+    }
+    private void _pop(Iterator ite){
+        if(this.empty_()){
+            throw new Exception("List._pop");
+        }
+        Iterator iprev = ite.prev;
+        Iterator inext = ite.next;
+        if(iprev is null){
+            this._head = ite.next;
+        }else{
+            iprev.next = inext;
+        }
+        if(inext is null){
+            this._toe = ite.prev;
+        }else{
+            inext.prev = iprev;
+        }
+        _length--;
+    }
+    /// 文字列に変換
+    override string toString(){
+        string _toString(Iterator iteHead){
+            if(iteHead is null){
+                return "";
+            }else{
+                const string s1 = iteHead.toString();
+                const string s2 = ", ";
+                const string s3 = _toString(iteHead.next);
+                if(s3 == ""){
+                    return s1;
+                }else{
+                    return s1~s2~s3;
+                }
+            }
+        }
+        return "List["~_toString(_head)~"]";
+    }
+    // イテレータ
+    private class Iterator{
+        T data;
+        Iterator prev;
+        Iterator next;
+        this(T data, Iterator prev, Iterator next){
+            this.data = data;
+            this.prev = prev;
+            this.next = next;
+        }
+        override string toString(){
+            return text(data);
+            //return "";
+        }
+    }
+}
+/// 固定長双方向リスト(コンストラクタでサイズを指定)
+class FixedList(T) : List!(T){
+    const int _allSize;
+    int _length;
+    Iterator[] _iteratorArray;
+    Iterator _usingHead;
+    Iterator _usingToe;
+    Iterator _unuseHead;
+    /// サイズを指定して生成
+    /// Params:
+    /// allSize = 初期化する長さ
+    this(in int allSize)
+    in{
+        assert(allSize>0);
+    }body{
+        this._allSize = allSize;
+        this._length = 0;
+        this._iteratorArray.length = this._allSize;
+        // 初期化
+        foreach(ref i; this._iteratorArray){
+            i = new Iterator();
+        }
+
+        for(int i=0; i<this._iteratorArray.length; i++){
+            Iterator prev    = i-1>=0 ? this._iteratorArray[i-1] : null;
+            Iterator current = this._iteratorArray[i];
+            Iterator next    = i+1<this._iteratorArray.length ? this._iteratorArray[i+1] : null;
+            current.prev = prev;
+            current.next = next;
+        }
+        this._unuseHead = this._iteratorArray[0];
+        this._usingHead = null;
+    }
+    invariant(){
+        //assert(iteListSize(this._usingHead) == this._length);
+        //assert(iteListSize(this._unuseHead) == this._allSize - this._length);
+        assert(this._allSize == this._iteratorArray.length);
+    }
+    unittest{
+        writeln("");
+        scanf("");
+    }
+    private int iteListSize(Iterator ite){
+        if(ite is null){return 0;}
+        else{return 1+iteListSize(ite.next);}
+    }
+    /// リストの長さ
+    pure const override uint length(){
+        return this._length;
+    }
+    pure const uint allSize(){
+        return this._allSize;
+    }
+    pure const uint restLength(){
+        return this.allSize() - this.length();
+    }
+    /// リストが空っぽか？
+    pure const override bool empty(){
+        return this.length==0;
+    }
+    /// リストがいっぱいか
+    pure const bool full(){
+        return this.restLength == 0;
+    }
+    /// 先頭にデータを追加
+    override void pushFront(T data){
+        // unuseのIteratorのりすとから一個持ってくる
+        Iterator newIte = this._unuseHead;
+        if(newIte.next !is null){
+            newIte.next.prev = null;
+        }
+        this._unuseHead = newIte.next;
+        //
+        newIte.data = data;
+        newIte.next = this._usingHead;
+        newIte.prev = null;
+        if(this._usingHead !is null){ //空っぽの場合は何もしない
+            this._usingHead.prev = newIte;
+        }else{
+            this._usingToe = newIte;
+        }
+        this._usingHead = newIte;
+
+        assert(newIte.prev is null);
+
+        this._length += 1;
+    }
+        
+
+    /// 後ろにデータを追加
+    override void pushBack(T data){
+        // unuseのIteratorのリストから一個持ってくる
+        Iterator newIte = this._popUnuse();
+        //
+        newIte.data = data;
+        newIte.prev = this._usingToe;
+        newIte.next = null;
+        if(this._usingToe !is null){ //空っぽの場合は何もしない
+            this._usingToe.next = newIte;
+        }else{
+            this._usingHead = newIte;
+        }
+        this._usingToe = newIte;
+
+        assert(newIte.next is null, to!(string)(this));
+
+        this._length += 1;
+    }
+    /// 先頭のデータをひとつ削除
+    override T popFront(){
+        if(this.empty()){throw new Exception("List.popFront");}
+        // 消すイテレータを得る
+        Iterator delIte = this._usingHead;
+        T res = delIte.data;
+        // 後始末 using
+        if(delIte.next !is null){
+            delIte.next.prev = null;
+        } else {
+            assert(this.length == 1);
+            this._usingToe = null;
+        }
+        this._usingHead = delIte.next;
+        // 後始末 unuse
+        static if(is(typeof(delIte.data) == class)){
+            delIte.data = null;
+        }else{
+            delIte.data = typeof(delIte.data).init;
+        }
+
+        delIte.prev = null;
+        delIte.next = this._unuseHead;
+        if(delIte.next !is null){
+            delIte.next.prev = delIte;
+        }
+        this._unuseHead = delIte;
+        
+        this._length -= 1;
+        return res;
+    }
+    /// 後ろの要素をひとつ削除
+    override T popBack(){
+        if(this.empty()){throw new Exception("List.popBack");}
+        // 消すイテレータを得る
+        Iterator delIte = this._usingToe;
+        T res = delIte.data;
+        // 後始末 using
+        if(delIte.prev !is null){
+            delIte.prev.next = null;
+        } else {
+            assert(this.length == 1);
+            this._usingHead = null;
+        }
+        this._usingToe = delIte.prev;
+        // 後始末 unuse
+        static if(is(typeof(delIte.data) == class)){
+            delIte.data = null;
+        }else{
+            delIte.data = typeof(delIte.data).init;
+        }
+        delIte.prev = null;
+        delIte.next = this._unuseHead;
+        if(delIte.next !is null){
+            delIte.next.prev = delIte;
+        }
+        this._unuseHead = delIte;
+        
+        this._length -= 1;
+        return res;
+    }
+    /// 先頭のデータを取得
+    override T front_(){
+        if(this._usingHead is null){
+            throw new Exception("");
+        }
+        return this._usingHead.data;
+    }
+    /// 後ろのデータを取得
+    override T back_(){
+        if(this._usingToe is null){
+            throw new Exception("");
+        }
+        return this._usingToe.data;
+    }
+    /// foreach用
+    override int opApply(int delegate(ref T) dg){
+        int _foreach(Iterator iteHead){
+            if(iteHead is null){
+                return 0;
+            }else{
+                int res = dg(iteHead.data);
+                if(res == 0){
+                    return _foreach(iteHead.next);
+                }else{
+                    return res;
+                }
+            }
+        }
+        return _foreach(this._usingHead);
+    }
+    /// foreach用
+    override int opApply(int delegate(ref uint, ref T) dg){
+        int _foreach(uint i, Iterator iteHead){
+            if(iteHead is null){
+                return 0;
+            }else{
+                int res = dg(i, iteHead.data);
+                if(res == 0){
+                    return _foreach(i+1, iteHead.next);
+                }else{
+                    return res;
+                }
+            }
+        }
+        return _foreach(0, this._usingHead);
+    }
+    /// foreach_reverse用
+    override int opApplyReverse(int delegate(ref T) dg){
+        int _foreach(Iterator iteToe){
+            if(iteToe is null){
+                return 0;
+            }else{
+                int res = dg(iteToe.data);
+                if(res==0){
+                    return _foreach(iteToe.prev);
+                }else{
+                    return res;
+                }
+            }
+        }
+        return _foreach(this._usingToe);
+    }
+    /// foreach_reverse用
+    override int opApplyReverse(int delegate(ref uint, ref T) dg){
+        int _foreach(uint i, Iterator iteToe){
+            if(iteToe is null){
+                return 0;
+            }else{
+                int res = dg(i, iteToe.data);
+                if(res==0){
+                    return _foreach(i-1, iteToe.prev);
+                }else{
+                    return res;
+                }
+            }
+        }
+        return _foreach(this.length-1, this._usingToe);
+    }
+    /// 全ての要素を削除する
+    /// See_also:
+    ///     erase()
+    override void clear()
+    out{
+        assert(this._length == 0, to!(string)(this));
+    }body{
+        int l = this.length;
+        for(int i=0; i<l; i++){
+            this.popFront();
+        }
+    }
+    /// con(n) = trueとなる要素を削除する
+    /// See_also:
+    ///     leave
+    override void remove(bool delegate(T) con){
+        void _remove(Iterator head){
+            if(head is null){
+                return;
+            }else{
+                static if(is(head.data == struct)){
+                    assert(head.data !is null);
+                }
+                Iterator next = head.next; //head.nextの先が_popUsingによって変わる可能性があるため
+                if(con(head.data)){
+                    _popUsing(head);
+                    this._length -= 1;
+                }
+                _remove(next);
+            }
+        }
+        _remove(this._usingHead);
+    }
+    /// con(n) = falseとなる要素を削除する
+    /// See_also:
+    ///     remove
+    override void leave(bool delegate(T) con){
+        void _leave(Iterator head){
+            if(head is null){
+                return;
+            }else{
+                Iterator next = head.next; //head.nextの先が_popUsingによって変わる可能性があるため
+                if(!con(head.data)){
+                    _popUsing(head);
+                    this._length -= 1;
+                }
+                _leave(next);
+            }
+        }
+        _leave(this._usingHead);
+    }
+    private void _popUsing(Iterator ite)
+    in{
+        assert(ite !is null);
+    }body{
+        if(this.empty_()){
+            throw new Exception("List._popUsing");
+        }
+        Iterator iprev = ite.prev;
+        Iterator inext = ite.next;
+        if(iprev is null){
+            this._usingHead = ite.next;
+        }else{
+            iprev.next = inext;
+        }
+        if(inext is null){
+            this._usingToe = ite.prev;
+        }else{
+            inext.prev = iprev;
+        }
+        // unuse に追加
+        ite.next = this._unuseHead;
+        ite.prev = null;
+        static if(is(typeof(ite.data) == class)){
+            ite.data = null;
+        }else{
+            ite.data = typeof(ite.data).init;
+        }
+        if(ite.next !is null){
+            ite.next.prev = ite;
+        }
+        this._unuseHead = ite;
+    }
+    private Iterator _popUnuse(){
+        if(this._unuseHead is null){
+            throw new Exception("FixedList._popUsing");
+        }
+        Iterator ite = this._unuseHead;
+        if(ite.next !is null){
+            ite.next.prev = null;
+        }
+        this._unuseHead = ite.next;
+        return ite;
+    }
+    /// 文字列に変換
+    override string toString(){
+        string res = "";
+        res ~= "List[";
+        foreach(i,d; this){
+            if(i!=0){res ~= ", ";}
+            res ~= to!(string)(d);
+        }
+        res ~= "]";
+        res ~= to!(string)(this.length);
+        return res;
+    }
+    private class Iterator{
+        T data;
+        Iterator prev;
+        Iterator next;
+        invariant(){
+            if(prev !is null){
+                assert(prev != this);
+            }
+            if(next !is null){
+                assert(next != this);
+            }
+            if(prev is null){ assert(next is null);}
+            if(next is null){ assert(prev is null);}
+        }
+        this(){
+            this.prev = null;
+            this.next = null;
+        }
+        this(T data, Iterator prev, Iterator next){
+            this.data = data;
+            this.prev = prev;
+            this.next = next;
+        }
+        override string toString(){
+            return to!(string)(data);
+        }
+    }
+}
+alias VariableList LinkedList;
+alias FixedList ArrayList;
+
+
+
+
+version(none){
+    class Test{
+        int x;
+        this(int x){this.x=x;}
+        override string toString(){
+            return to!(string)(x);
+        }
+        bool is_enable(){
+            return x==0;
+        }
+    }
+
+    alias VariableList!(Test) VTestList;
+    alias FixedList!(Test) FTestList;
+
+
+
+
+
+
+
+    class FTestList2 : FTestList{
+        this(){
+            super(5);
+        }
+        void remove_notenable(){
+            this.remove((Test t){return !t.is_enable();});
+        }
+        void remove_odd(){
+            this.remove((Test t){return t.x % 2 == 0;});
+        }
+        void remove_even(){
+            this.remove((Test t){return t.x % 2 == 1;});
+        }
+        void filter_twice(){
+            this.filter((Test t){ t.x *= 2 ;}, (Test t){return (t.x%2)==0;});
+        }
+    }
+
+    int main_(){
+        auto l = new FTestList2();
+        writeln(l);
+        l.pushBack(new Test(1));
+        writeln(l);
+        l.popBack();
+        writeln(l);
+        l.pushBack(new Test(2));
+        writeln(l);
+        l.popBack();
+        writeln(l);
+        l.pushBack(new Test(2));
+        writeln(l);
+        l.pushFront(new Test(3));
+        writeln(l);
+        l.pushFront(new Test(4));
+        writeln(l);
+        l.filter_twice();
+        writeln(l);
+        foreach(ref i;l){
+            i.x =i.x*2;
+        }
+        writeln(l);
+        l.pushBack(new Test(5));
+        writeln(l);
+        l.popFront();
+        writeln(l);
+        l.popBack();
+        writeln(l);
+        l.pushBack(new Test(1));
+        writeln(l);
+        l.remove_odd();
+        writeln(l);
+        l.pushBack(new Test(6));
+        writeln(l);
+        l.pushBack(new Test(6));
+        writeln(l);
+        l.clear();
+        writeln(l);
+        return 0;
+    }
+}

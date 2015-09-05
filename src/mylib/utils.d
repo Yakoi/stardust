@@ -1,0 +1,216 @@
+module mylib.utils;
+
+import std.stdio;
+import std.conv;
+import std.string;
+import std.c.stdlib;
+import std.c.locale;
+import std.windows.charset;
+import std.datetime;
+import std.zip;
+import std.xml;
+import mylib.yaml;
+import mylib.csv;
+import mylib.table;
+import mylib.encoder;
+import mylib.hashfunction;
+
+pure T abs(T)(in T data){
+    return data<0 ? -data : data;
+}
+/// 引数の中で最大のものを返す
+pure T max(T)(in T x, in T[] xs ...) {
+    static if(is(T == const(double))){double res = x;}
+    else static if(is(T == const(int))){int res = x;}
+    else{T res = x;}
+    //T res = x;
+    foreach(xx;xs){
+        if(xx>res){
+            res = xx;
+        }
+    }
+    return res;
+}
+
+/// 引数の配列の要素の中で最大のものを返す
+pure T maxArray(T)(in T[] xs)
+in{
+    assert(xs.length >= 1);
+}body{
+    T res = xs[0];
+    foreach(x;xs){
+        if(x>res){
+            res = x;
+        }
+    }
+    return res;
+}
+
+/// 引数の中で最小のものを返す
+pure T min(T)(in T x, in T[] xs ...) {
+    static if(is(T == const(double))){double res = x;}
+    else static if(is(T == const(int))){int res = x;}
+    else{T res = x;}
+    foreach(xx;xs){
+        if(xx<res){
+            res = xx;
+        }
+    }
+    return res;
+}
+
+/// 引数の配列の要素の中で最小のものを返す
+pure T minArray(T)(in T[] xs)
+in{
+    assert(xs.length >= 1);
+}body{
+    T res = xs[0];
+    foreach(x;xs){
+        if(x<res){
+            res = x;
+        }
+    }
+    return res;
+}
+/// x以上z以下でyに最も近い値を求める
+pure T between(T)(in T x, in T y, in T z)
+in{
+    assert(x<=z);
+}body{
+    return min(max(x,y), z);
+}
+
+/// 配列xsの中にxと等しい値が含まれるかどうか
+pure bool contain(T)(in T[] xs, in T x){
+    foreach(xx; xs){
+        if(x == xx){return true;}
+    }
+    return false;
+}
+/+bool contain(string[] strs, string str){
+    foreach(s; strs){
+        if(s == str){return true;}
+    }
+    return false;
+}
++/
+///文字コードの変換
+///http://pokohimesama.blog98.fc2.com/blog-category-10.html
+char[] toCString(in string str, in int start=0, in int end=int.max){
+    return cast(char[])str;
+    /+
+    char[] s;
+    wstring ws = (to!(wstring)(str))[start..min!(int)(end, $)];
+    s.length = str.length * 3 + 1;
+    setlocale(LC_CTYPE, "");
+    auto n = wcstombs(s.ptr, cast(wchar*)(ws~"\0").ptr, s.length);
+    return (s[0 .. n]);
+    +/
+}
+/// char[]にするよ！
+char[] toCString(in char[] str, in int start=0, in int end=int.max){
+    return cast(char[])str[0..min!(int)(end, $)];
+    /+
+    char[] s;
+    wstring ws = (to!(wstring)(str))[start..min!(int)(end, $)];
+    s.length = str.length * 3 + 1;
+    setlocale(LC_CTYPE, "");
+    auto n = wcstombs(s.ptr, cast(wchar*)(ws~"\0").ptr, s.length);
+    return (s[0 .. n]);
+    +/
+}
+/// wchar* にするよ
+wchar* toWStringz(char[] str){
+    return to!(wchar[])(str~"\0").ptr;
+}
+/// wchar* にするよ
+wchar* toWStringz(string str){
+    return to!(wchar[])(str~"\0").ptr;
+}
+/// wchar* にするよ
+wchar* toWStringz(dchar[] str){
+    return to!(wchar[])(str~"\0").ptr;
+}
+/// wchar* にするよ
+wchar* toWStringz(dstring str){
+    return to!(wchar[])(str~"\0").ptr;
+}
+/// wchar* にするよ
+wchar* toWStringz(wchar[] str){
+    return to!(wchar[])(str~"\0").ptr;
+}
+/// wchar* にするよ
+wchar* toWStringz(wstring str){
+    return to!(wchar[])(str~"\0").ptr;
+}
+
+
+///
+wstring[] divstr(in wstring wstr, in int num){
+    wstring[] res;
+    foreach(w; splitLines(cast(wstring)wstr)){
+        for(int i=0; i<w.length/num+1; i++){
+            res ~= w[i*num .. min!(int)((i+1)*num, $)];
+        }
+    }
+    return res;
+}
+
+void[] zipData(in ubyte[] data, in string directory = ""){
+    auto archive = new ZipArchive;
+    auto mem = new ArchiveMember;
+    mem.expandedData = data.dup; 
+    mem.name = directory;
+    mem.compressionMethod = 8;
+    archive.addMember(mem);
+    auto data2 = archive.build(); // encode
+    return data2;
+}
+void[] unzipData(in ubyte[] data, in string directory = ""){
+    auto archive = new ZipArchive(cast(ubyte[])data);
+    auto data1 = archive.expand(archive.directory[directory]);
+    return data1;
+}
+///XMLの電子署名取得
+string getXmlSignature(in Base64Encoder b64, in Encoder enc, in HashFunction hf, in std.xml.Element elm){
+    return cast(string)b64.encode(enc.encode(hf.hash(cast(ubyte[])join(elm.pretty(0),""))));
+}
+///XMLの電子署名取得
+string getXmlSignature(in Encoder enc, in HashFunction hf, in std.xml.Element elm){
+    return cast(string)std.base64.Base64.encode(cast(ubyte[])enc.encode(hf.hash(cast(ubyte[])join(elm.pretty(0),""))));
+}
+
+/// XMLの電子署名チェック
+bool checkXmlSignature(in Encoder enc, in HashFunction hf, in string xmlData){
+    Document d = new Document(xmlData);
+    if("signature" !in d.tag.attr){return false;}
+    immutable string sig = d.tag.attr["signature"];
+    d.tag.attr.remove("signature");
+    writeln(sig);
+    writeln(getXmlSignature(enc, hf, d));
+    return sig == getXmlSignature(enc, hf, d);
+}
+/// XMLの電子署名をXMLのルートに埋め込む
+void setXmlSignature(in Encoder enc, in HashFunction hf, ref Element elem){
+    if("signature" in elem.tag.attr){assert(false);}
+    immutable string sig = getXmlSignature(enc, hf, elem);
+    elem.tag.attr["signature"] = sig;
+}
+
+
+/// Table から YamlNode に変換するよ
+YamlNode tableToYamlNode(Table tbl){
+    YamlNode[] array;
+    array.length = tbl.length;
+    foreach(uint i, TableRow row; tbl){
+        string[string] yrow;
+        foreach(string key, string data; row){
+            yrow[key] = data;
+        }
+        array[i] = yn(yrow);
+    }
+    YamlNode root = yn(array);
+    return root;
+}
+
+

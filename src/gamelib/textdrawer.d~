@@ -1,0 +1,240 @@
+module gamelib.textdrawer;
+import gamelib.all;
+import dxlib.all;
+
+interface TextDrawerInterface(T){
+    bool tl(Color color, Vector pos, T str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255));
+    bool t(Color color, Vector pos, T str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255));
+    bool tr(Color color, Vector pos, T str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255));
+    bool l(Color color, Vector pos, T str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255));
+    bool c(Color color, Vector pos, T str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255));
+    bool r(Color color, Vector pos, T str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255));
+    bool bl(Color color, Vector pos, T str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255));
+    bool b(Color color, Vector pos, T str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255));
+    bool br(Color color, Vector pos, T str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255));
+}
+
+class TextDrawer{
+}
+class WTextDrawer : TextDrawerInterface!(wstring){
+    DrawableSurfaceInterface screen;
+
+    this(DrawableSurfaceInterface screen){
+        this.screen = screen;
+    }
+    /// テキストの一行表示(wstring)
+    /// Params:
+    /// color = 色
+    /// pos = 左上の位置
+    private bool line(Color color, Vector pos, wstring str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255))
+    in{
+    }body{
+        //描画
+        SetDrawBlendMode(blendMode, blendParam);
+        SetDrawBright(bright.red, bright.green, bright.blue);
+        //SetDrawScreen(this.screen.dxhandle);
+        if(font is null){
+            return 0==dx_DrawExtendString(cast(int)pos.x, cast(int)pos.y, scaleX, scaleY,
+                    toWStringz(str), color.dxColor);
+        }else{
+            return 0==dx_DrawExtendStringToHandle(cast(int)pos.x, cast(int)pos.y, scaleX, scaleY,
+                    toWStringz(str), color.dxColor, font.handle);
+        }
+    }
+    /// テキストの表示(string)
+    /// Params:
+    /// color = 色
+    /// pos = 左上の位置
+    override bool tl(Color color, Vector pos, wstring str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255))
+    in{
+        assert(blendParam >= 0);
+        assert(blendParam < 256);
+    }body{
+        const wstring[] ss = splitLines(str);
+        const int fs = getFontSize(font);
+        foreach(uint i,s; ss){
+            this.line(color, pos+vecpos(0,i*(fs*scaleY)), s, scaleX, scaleY, font, blendMode, blendParam, bright);
+        }
+        return true;
+    }
+    /// テキストの表示(string)
+    /// Params:
+    /// color = 色
+    /// pos = 上の位置
+    override bool t(Color color, Vector pos, wstring str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255))
+    in{
+        assert(blendParam >= 0);
+        assert(blendParam < 256);
+    }body{
+        const wstring[] ss = splitLines(str);
+        const int fs = getFontSize(font);
+        foreach(uint i,s; ss){
+            const int width = this.stringWidth(s, -1, font);
+            this.line(color, pos+vecpos(-width*scaleX/2,i*(fs*scaleY)), s, scaleX, scaleY, font, blendMode, blendParam, bright);
+        }
+        return true;
+    }
+    /// テキストの表示(string)
+    /// Params:
+    /// color = 色
+    /// pos = 右上の位置
+    override bool tr(Color color, Vector pos, wstring str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255))
+    in{
+        assert(blendParam >= 0);
+        assert(blendParam < 256);
+    }body{
+        const wstring[] ss = splitLines(str);
+        const int fs = getFontSize(font);
+        foreach(uint i,s; ss){
+            const int width = this.stringWidth(s, -1, font);
+            this.line(color, pos+vecpos(-width*scaleX,i*(fs*scaleY)), s, scaleX, scaleY, font, blendMode, blendParam, bright);
+        }
+        return true;
+    }
+    /// テキストの表示(string)
+    /// Params:
+    /// color = 色
+    /// pos = 左の位置
+    override bool l(Color color, Vector pos, wstring str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255))
+    in{
+        assert(blendParam >= 0);
+        assert(blendParam < 256);
+    }body{
+        const wstring[] ss = splitLines(str);
+        const int fs = getFontSize(font);
+        const double u = (cast(double)ss.length*fs*scaleY/2);
+        this.tl(color, pos-vecpos(0,u), str, scaleX, scaleY, font, blendMode, blendParam, bright);
+        return true;
+    }
+    /// テキストの表示(string)
+    /// Params:
+    /// color = 色
+    /// pos = 中央の位置
+    override bool c(Color color, Vector pos, wstring str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255))
+    in{
+        assert(blendParam >= 0);
+        assert(blendParam < 256);
+    }body{
+        const wstring[] ss = splitLines(str);
+        const int fs = getFontSize(font);
+        const double u = (cast(double)ss.length*fs*scaleY/2);
+        this.t(color, pos-vecpos(0,u), str, scaleX, scaleY, font, blendMode, blendParam, bright);
+        return true;
+    }
+    /// テキストの表示(string)
+    /// Params:
+    /// color = 色
+    /// pos = 右の位置
+    override bool r(Color color, Vector pos, wstring str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255))
+    in{
+        assert(blendParam >= 0);
+        assert(blendParam < 256);
+    }body{
+        const wstring[] ss = splitLines(str);
+        const int fs = getFontSize(font);
+        const double u = (cast(double)ss.length*fs*scaleY/2);
+        this.tr(color, pos-vecpos(0,u), str, scaleX, scaleY, font, blendMode, blendParam, bright);
+        return true;
+    }
+    /// テキストの表示(string)
+    /// Params:
+    /// color = 色
+    /// pos = 左下の位置
+    override bool bl(Color color, Vector pos, wstring str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255))
+    in{
+        assert(blendParam >= 0);
+        assert(blendParam < 256);
+    }body{
+        const wstring[] ss = splitLines(str);
+        const int fs = getFontSize(font);
+        const double u = (ss.length*fs*scaleY);
+        this.tl(color, pos-vecpos(0,u), str, scaleX, scaleY, font, blendMode, blendParam, bright);
+        return true;
+    }
+    /// テキストの表示(string)
+    /// Params:
+    /// color = 色
+    /// pos = 下の位置
+    override bool b(Color color, Vector pos, wstring str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255))
+    in{
+        assert(blendParam >= 0);
+        assert(blendParam < 256);
+    }body{
+        const wstring[] ss = splitLines(str);
+        const int fs = getFontSize(font);
+        const double u = (ss.length*fs*scaleY);
+        this.t(color, pos-vecpos(0,u), str, scaleX, scaleY, font, blendMode, blendParam, bright);
+        return true;
+    }
+    /// テキストの表示(string)
+    /// Params:
+    /// color = 色
+    /// pos = 右下の位置
+    override bool br(Color color, Vector pos, wstring str, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255))
+    in{
+        assert(blendParam >= 0);
+        assert(blendParam < 256);
+    }body{
+        const wstring[] ss = splitLines(str);
+        const int fs = getFontSize(font);
+        const double u = (ss.length*fs*scaleY);
+        this.tr(color, pos-vecpos(0,u), str, scaleX, scaleY, font, blendMode, blendParam, bright);
+        return true;
+    }
+    /// 文字の長さ
+    int stringWidth(wstring str, int str_len = -1, Font font=null){
+        if(str_len < 0){str_len = str.length;}
+        if(font is null){
+            return dx_GetDrawStringWidth(toWStringz(str), str_len);
+        }else{
+            return dx_GetDrawStringWidthToHandle(toWStringz(str), str_len, font.handle);
+        }
+    }
+    bool ch(Color color, Vector pos, wchar ch, double scaleX, double scaleY, Font font=null,
+            BlendMode blendMode=BlendMode.NOBLEND, int blendParam=255,
+            Color bright = col(255,255,255))
+    in{
+        assert(blendParam >= 0);
+        assert(blendParam < 256);
+    }body{
+        return this.c(color, pos, [ch], scaleX, scaleY, font, blendMode, blendParam, bright);
+    }
+}

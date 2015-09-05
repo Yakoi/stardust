@@ -1,0 +1,5 @@
+testcsv.obj+mylib\csv.obj+mylib\database.obj+sqlite3\sqlite3.obj
+testcsv.exe
+testcsv.map
+sqlite3.lib
+testcsv.def/noi/map

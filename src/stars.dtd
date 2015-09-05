@@ -1,0 +1,12 @@
+<!ELEMENT stars (star*)>
+<!ELEMENT star (pos, size, power, color, date, info?)>
+<!ELEMENT pos (x,y)>
+<!ELEMENT x (#PCDATA)>
+<!ELEMENT y (#PCDATA)>
+<!ELEMENT size (#PCDATA)>
+<!ELEMENT power (#PCDATA)>
+<!ELEMENT color (red,green,blue)>
+<!ELEMENT red (#PCDATA)>
+<!ELEMENT green (#PCDATA)>
+<!ELEMENT blue (#PCDATA)>
+<!ELEMENT date (#PCDATA)>

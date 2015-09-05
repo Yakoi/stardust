@@ -1,0 +1,5 @@
+shade.obj+dxlib\all.obj+dxlib\dxlib.obj+dxlib\dxalias.obj
+shade.exe
+shade.map
+
+shade.def/noi/map

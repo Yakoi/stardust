@@ -1,0 +1,1 @@
+bud stardust -c -full -D -Dd../doc

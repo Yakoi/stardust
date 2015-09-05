@@ -1,0 +1,9 @@
+stars:
+  -
+    x:10
+    y:30
+    size:30
+    red:0.3
+    green:0.1
+    blue:0.5
+

@@ -1,0 +1,58 @@
+// D import file generated from 'gamelib\all.d'
+module gamelib.all;
+public 
+{
+    import gamelib.color;
+    import gamelib.drawer;
+    import gamelib.vector;
+    import gamelib.collision;
+    import gamelib.area;
+    import gamelib.bullet;
+    import gamelib.collisiondetector;
+    import gamelib.collisionmanager;
+    import gamelib.direction;
+    import gamelib.effect;
+    import gamelib.enemy;
+    import gamelib.transition;
+    import gamelib.figure;
+    import gamelib.font;
+    import gamelib.fps;
+    import gamelib.gamesystem;
+    import gamelib.gamemain;
+    import gamelib.generator;
+    import gamelib.imageeditor;
+    import gamelib.img;
+    import gamelib.input;
+    import gamelib.inputtable;
+    import gamelib.loader;
+    import gamelib.manager;
+    import gamelib.map;
+    import gamelib.matrix;
+    import gamelib.mouse;
+    import gamelib.mover;
+    import gamelib.movie;
+    import gamelib.music;
+    import gamelib.player;
+    import gamelib.screen;
+    import gamelib.sound;
+    import gamelib.surface;
+    import gamelib.table;
+    import gamelib.text;
+    import gamelib.textdrawer;
+    import gamelib.texteffect;
+    import gamelib.utils;
+    import gamelib.vertex;
+    import gamelib.window;
+    import mylib.list;
+    import mylib.pool;
+    import mylib.utils;
+    import mylib.rand;
+    import mylib.stack;
+    import mylib.primitives;
+    import mylib.rect;
+    import mylib.chart;
+    import std.stdio;
+    import std.math;
+    import std.string;
+    import std.conv;
+}

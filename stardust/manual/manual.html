@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="ja" xml:lang="ja" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>STARDUST マニュアル</title>
+        <link rev="made" href="./manual.html" />
+        <link rel="next" href="./manual.html" />
+        <meta http-equiv="content-type" content="application/xhtml+xml" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    </head>
+    <body>
+        <h1>STARDUST マニュアル</h1>
+        <h2>目次</h2>
+        <ul>
+            <li><a href="#abstract">概要</a></li>
+            <li><a href="#method_of_execution">起動方法</a></li>
+            <li><a href="#description_of_screen">画面の説明</a></li>
+            <li><a href="#method_of_operation">操作方法</a></li>
+        </ul>
+        <h2 id="abstract">概要</h2>
+        <p>
+        左右キーとボタン一つのみ使用するシンプルなアクションゲームです。
+        </p>
+        <h3>ルール</h3>
+        <p>
+        <img src="./rule01.png" alt="タイトル画面1" width="320" height="240" />
+        <br />
+        画面上部から星屑（白い丸印）が落ちてきますので、画面下部のバー（白い四角形）を左右に動かし、打ち返して下に落ちないようにしてください。<br />
+        星屑は10回打ち返すと光り出し、もう一度当てることで空へと打ち上げることができます。<br />
+        星屑を下に落とすことなく、多くの星屑を空へ打ち上げることが目的です。
+        </p>
+        <p>
+        時間が経つと星屑が追加され、左右の移動では間に合わなくなってきます。<br />
+        その時はZキーまたはXキーを押してください。移動中の方向に高速移動することができます。<br />
+        高速移動使用時には、移動前の位置に残像が残ります。この残像でも星屑を打ち返すことができます。<br />
+        高速移動を使用後は、星屑を打ち返すまでは次の高速移動を使うことができません<br />
+        （連続して高速移動を使うことはできません）。
+        </p>
+        <p>
+        ゲームの結果は自動的に記録され、良い結果はリプレイを閲覧することができます。
+        </p>
+        <h2 id="method_of_execution">起動方法</h2>
+        <p>
+        「stardust.exe」アイコンをダブルクリックで実行してください。
+        </p>
+        <h2 id="description_of_screen">画面の説明</h2>
+        <h3>タイトル画面</h3>
+        <p>
+        <img src="./screen_title.png" alt="タイトル画面1" width="320" height="240" />
+        </p>
+        <table summary="タイトル画面1" cellspacing="1" border="1">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>名前</td>
+                    <td>説明</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>選択中記号</td>
+                    <td>現在選択中の項目を表します。</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>メニュー「ゲームを開始する」</td>
+                    <td>ゲームを始めます。ゲーム画面を参照ください。</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>メニュー「スコアを見る」</td>
+                    <td>スコア一覧を表示します。スコア一覧画面を参照ください。</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>メニュー「音楽を選ぶ」</td>
+                    <td>２曲ある音楽を切り替えます。</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>メニュー「ゲームを終了する」</td>
+                    <td>ゲームを終了し、ウィンドウを閉じます。</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>★</td>
+                    <td>ゲームで得た総スコア（打ち上げた星屑の数）を表示します。</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3>スコア一覧画面</h3>
+        <p>
+        <img src="./screen_score.png" alt="スコア一覧画面" width="320" height="240" />
+        </p>
+        <table summary="タイトル画面2" cellspacing="1" border="1">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>名前</td>
+                    <td>説明</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>選択中記号</td>
+                    <td>現在選択中の項目を表します。</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>過去のスコア一覧</td>
+                    <td>上位１０回分のスコアを表示します。Zキーでリプレイを再生します。</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3>ゲーム</h3>
+        <p>
+        <img src="./screen_game.png" alt="ゲーム・リプレイ" width="320" height="240" />
+        </p>
+        <table summary="ゲーム" cellspacing="1" border="1">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>名前</td>
+                    <td>説明</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>バー</td>
+                    <td>星屑を打ち返します。左右キーで移動できます。</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>星屑</td>
+                    <td>放物運動で移動します。下に落とすとゲームオーバーです。11回以上打ち返すとスコアが増えます。</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>★</td>
+                    <td>スコアです。</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>TIME</td>
+                    <td>ゲームのプレイ時間です。</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 id="method_of_operation">操作方法</h2>
+        <h3>タイトル画面</h3>
+        <table summary="タイトル画面" cellspacing="1" border="1">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>ボタン</td>
+                    <td>動作</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Zキー</td>
+                    <td>決定する。</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Xキー</td>
+                    <td>取り消しする。</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>方向キー</td>
+                    <td>メニューの選択をする。</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Hキー</td>
+                    <td>←（方向キー）と同様。</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Jキー</td>
+                    <td>↓（方向キー）と同様。</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Kキー</td>
+                    <td>↑（方向キー）と同様。</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Lキー</td>
+                    <td>→（方向キー）と同様。</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>ゲーム中</h3>
+        <table summary="ゲーム中" cellspacing="1" border="1">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>ボタン</td>
+                    <td>動作</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>左右キー</td>
+                    <td>バーを移動する。</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>左右キー ＋ ZキーまたはXキー</td>
+                    <td>高速移動する。</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>リプレイ再生中</h3>
+        <table summary="リプレイ再生中" cellspacing="1" border="1">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>ボタン</td>
+                    <td>動作</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>→キー</td>
+                    <td>再生速度を高速化する。</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>←キー</td>
+                    <td>再生速度を低速化する。</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Zキー・Xキー</td>
+                    <td>タイトルに戻る。</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3>ゲームの設定を変更するボタン</h3>
+        <table summary="ゲームの設定を変更するボタン" cellspacing="1" border="1">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>ボタン</td>
+                    <td>動作</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Esc</td>
+                    <td>強制的にゲームを終了する。</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>F1</td>
+                    <td>FTPを表示する。</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>F2</td>
+                    <td>音楽の再生／停止を切り替える。</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>F3</td>
+                    <td>効果音の再生／停止を切り替える。</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>F5</td>
+                    <td>画面のサイズを切り替える。ボタンを押す度に、320x240、640x480、960x720に設定する。</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>F6</td>
+                    <td>画面のサイズをやや小さくする。</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>F7</td>
+                    <td>画面のサイズをやや大きくする。</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>F8</td>
+                    <td>音楽・効果音の音量をやや小さくする。</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>F9</td>
+                    <td>音楽・効果音の音量をやや大きくする。</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>F12</td>
+                    <td>タイトルに戻る。</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>スペース</td>
+                    <td>ゲームを一時中断する。</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>PrintScreen</td>
+                    <td>フォルダ「ss」に現在の画面を保存する。</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </body>
+</html>

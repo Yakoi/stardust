@@ -1,0 +1,13 @@
+name            , path       , loop  , volume , frequency
+reflect_wall    , chin.ogg   , FALSE , 1.0     , 44100
+reflect_bar     , chin.ogg   , FALSE , 1.0     , 22050
+appear_ball     , appear.ogg , FALSE , 1.0     , 44100
+appear_effect   , chin.ogg   , FALSE , 1.0     , 44100
+finish_reflect  , chin.ogg   , FALSE , 1.0     , 44100
+gosky           , chin.ogg   , FALSE , 1.0     , 44100
+finish_effect1  , chin.ogg   , FALSE , 1.0     , 22050
+finish_effect2  , chin.ogg   , FALSE , 1.0     , 27781
+finish_effect3  , chin.ogg   , FALSE , 1.0     , 33037
+gameover        , chukin.ogg , FALSE , 1.0     , 44100
+cursor          , cursor.wav , FALSE , 0.09     , 44100
+dash            , dash.ogg   , FALSE , 0.3     , 44100

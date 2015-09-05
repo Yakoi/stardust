@@ -1,0 +1,5 @@
+test.obj+dxlib\all.obj+dxlib\dxlib.obj+dxlib\dxalias.obj
+test.exe
+test.map
+
+test.def/noi/map

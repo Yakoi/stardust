@@ -1,0 +1,5 @@
+mylib\chart.obj+mylib\utils.obj+mylib\vector2d.obj+mylib\sincos.obj
+mylib\chart.exe
+mylib\chart.map
+
+mylib\chart.def/noi/map

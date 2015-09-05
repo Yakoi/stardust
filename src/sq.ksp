@@ -1,0 +1,5 @@
+sq.obj+mylib\squirrel.obj+squirrel\all.obj+squirrel\sqstdaux.obj+squirrel\squirrel.obj+squirrel\sqstdblob.obj+squirrel\sqstdio.obj+squirrel\sqstdmath.obj+squirrel\sqstdstring.obj+squirrel\sqstdsystem.obj
+sq.exe
+sq.map
+
+sq.def/noi/map

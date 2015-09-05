@@ -1,0 +1,10 @@
+-op
+-ID:\programs\dmd2\src\phobos\
+-ID:\programs\dmd2\src\druntime\import\
+-ID:\documents\program\stardust\src\
+-ID:\documents\program\stardust\src\mylib\
+-ID:\documents\program\stardust\src\sqlite3\
+testcsv.d
+mylib\csv.d
+mylib\database.d
+sqlite3\sqlite3.d

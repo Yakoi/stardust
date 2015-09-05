@@ -1,0 +1,7 @@
+-op
+-ID:\programs\dmd2\src\phobos\
+-ID:\programs\dmd2\src\druntime\import\
+-ID:\documents\program\stardust\src\mylib\
+-ID:\documents\program\stardust\src\camellia\
+mylib\encoder.d
+mylib\camelliaencoder.d

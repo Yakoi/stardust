@@ -1,0 +1,11 @@
+- #0
+  thickness:
+    1
+  path:
+    bdfShnmGothic.ttf
+  size:
+    14
+  fontName:
+    BDF東雲ゴシック
+  name:
+    shnm14

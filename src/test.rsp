@@ -1,0 +1,6 @@
+-op
+-ID:\programs\dmd2\src\phobos\
+-ID:\programs\dmd2\src\druntime\import\
+-ID:\documents\stardust\src\
+-ID:\documents\stardust\src\dxlib\
+test.d

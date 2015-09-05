@@ -1,0 +1,5 @@
+-op
+-IC:\dmd2\src\phobos\
+-IC:\dmd2\src\druntime\import\
+-ID:\documents\program\stardust\mylib\
+mylib\chart.d

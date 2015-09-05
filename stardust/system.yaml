@@ -1,0 +1,18 @@
+settingCsvFile:
+    music: ./data/musics.csv
+    sound: ./data/sounds.csv
+    font: ./data/fonts.csv
+directories:
+    music: ./data/music/
+    sound: ./data/sound/
+    font: ./data/font/
+graphic:
+    screenWidth: 320
+    screenHeight: 240
+    caption: ホシクズ
+    iconId: -1
+others:
+    alwaysRun: true
+    outputDxlibLog: true
+    defaultFont: 
+

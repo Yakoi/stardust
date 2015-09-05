@@ -1,0 +1,285 @@
+module controller;
+import gamelib.all;
+import mylib.yaml;
+
+alias InputLogData[string] ControllerLogData;
+/// コントローラ
+class Controller{
+    Input attack;
+    Input shoot;
+    Input power;
+    Input guard;
+    Input left;
+    Input right;
+    Input up;
+    Input down;
+    version(none)private ControllerLog _log;
+    private bool _recording = false;
+    private InputTable it;
+    /// コンストラクタ
+    this(InputTable it){
+        this.it = it;
+        this.attack = new Input;
+        this.shoot  = new Input;
+        this.power  = new Input;
+        this.guard  = new Input;
+        this.left   = new Input;
+        this.right  = new Input;
+        this.up     = new Input;
+        this.down   = new Input;
+        this.attack   ._recordingLog = true;
+        this.shoot  ._recordingLog = true;
+        this.power     ._recordingLog = true;
+        this.guard   ._recordingLog = true;
+        this.left   ._recordingLog = true;
+        this.right  ._recordingLog = true;
+        this.up     ._recordingLog = true;
+        this.down   ._recordingLog = true;
+        //this.attack = it.a;
+        //this.shoot = it.b;
+        //this.power = it.c;
+        //this.guard = it.c;
+        //this.left = it.left;
+        //this.right = it.right;
+        //this.up = it.up;
+        //this.down = it.down;
+    }
+    void update(){
+        this.attack .update(it.a     .isPress);
+        this.shoot  .update(it.b     .isPress);
+        this.power  .update(it.c     .isPress);
+        this.guard  .update(it.c     .isPress);
+        this.left   .update(it.left  .isPress);
+        this.right  .update(it.right .isPress);
+        this.up     .update(it.up    .isPress);
+        this.down   .update(it.down  .isPress);
+    }
+    /// 十字ボタンの横軸を取得
+    int horizon() {return (this.left.isPress ? -1 : 0) + (this.right.isPress ? 1 : 0);}
+    /// 十字ボタンの縦軸を取得
+    int vertical(){return (this.up.isPress   ? -1 : 0) + (this.down.isPress  ? 1 : 0);}
+    /// 十字ボタンの横軸を取得
+    Horizon3 horizon3(){
+        with(Horizon3)switch(this.horizon){
+        case -1:
+            return L;
+        case 0:
+            return C;
+        case 1:
+            return R;
+        default:
+            assert(false);
+        }
+    }
+    /// 十字ボタンの縦軸を取得
+    Vertical3 vertical3(){
+        with(Vertical3)switch(this.vertical){
+        case -1:
+            return T;
+        case 0:
+            return C;
+        case 1:
+            return B;
+        default:
+            assert(false);
+        }
+    }
+    /// 十字ボタンの方向を取得
+    Direction9 direction9(){
+        switch(this.horizon){
+        case -1:
+            switch(this.vertical){
+            case -1:
+                return Direction9.TL; //左上
+            case 0:
+                return Direction9.L; //左
+            case 1:
+                return Direction9.BL; //左下
+            default:
+                assert(false);
+            }
+        case 0:
+            switch(this.vertical){
+            case -1:
+                return Direction9.T; //上
+            case 0:
+                return Direction9.C; //入力なし
+            case 1:
+                return Direction9.B; //下
+            default:
+                assert(false);
+            }
+        case 1:
+            switch(this.vertical){
+            case -1:
+                return Direction9.TR; //右上
+            case 0:
+                return Direction9.R; //右
+            case 1:
+                return Direction9.BR; //右下
+            default:
+                assert(false);
+            }
+        default:
+            assert(false);
+        }
+    }
+    Direction5 direction5(){
+        final switch(this.direction9){
+        case Direction9.R :
+            return Direction5.R;
+        case Direction9.BR:
+            if(this.down.count < this.right.count){
+                return Direction5.B;
+            }else{
+                return Direction5.R;
+            }
+        case Direction9.B :
+            return Direction5.B;
+        case Direction9.BL:
+            if(this.down.count < this.left.count){
+                return Direction5.B;
+            }else{
+                return Direction5.L;
+            }
+        case Direction9.L :
+            return Direction5.L;
+        case Direction9.TL:
+            if(this.up.count < this.left.count){
+                return Direction5.T;
+            }else{
+                return Direction5.L;
+            }
+        case Direction9.T :
+            return Direction5.T;
+        case Direction9.TR:
+            if(this.up.count < this.right.count){
+                return Direction5.T;
+            }else{
+                return Direction5.R;
+            }
+        case Direction9.C :
+            return Direction5.C;
+        }
+    }
+}
+
+
+ControllerLogData controllerToControllerLogData(Controller ctr){
+    ControllerLogData ld;
+    ld["left"  ] = ctr.left  .log;
+    ld["right" ] = ctr.right .log;
+    ld["up"    ] = ctr.up    .log;
+    ld["down"  ] = ctr.down  .log;
+    ld["attack"] = ctr.attack.log;
+    ld["shoot" ] = ctr.shoot .log;
+    ld["power" ] = ctr.power .log;
+    ld["guard" ] = ctr.guard .log;
+    return ld;
+}
+InputLogPlayer load_input_log(YamlNode yn){
+    auto list = new VariableList!(int);
+    foreach(n; yn){
+        list.pushBack(n.i);
+    }
+    return new InputLogPlayer(list);
+}
+
+version(none)
+void saveLog(ControllerLogPlayer logplayer){
+    //YamlNode[string] res;
+    InputLogData[string] tmp;
+    tmp["left"] = logplayer.left.data;
+    tmp["right"] = logplayer.right.data;
+    //save_yaml("test.yaml", new Yaml([logToYaml(tmp)]));
+    save_yaml("test.yaml", logToYaml(tmp));
+}
+/// 書き出しようにYamlへ変換する
+MappingYamlNode logToYaml(ControllerLogData data){
+    YamlNode[string] ndata;
+    foreach(s,d; data){
+        ndata[s] = logToYaml(d);
+    }
+    return mapping(ndata);
+}
+/// 書き出しようにYamlへ変換する
+SequenceYamlNode logToYaml(InputLogData data){
+    SequenceYamlNode node = sequenceList!(int)(data);
+    return node;
+}
+
+/+
+log:
+    attack:
+        -30
+        -49
+        -88
+    left:
+        -39
++/
+
+
+class InputPlayController : Controller{
+    ControllerLogPlayer log;
+    private this(ControllerLogPlayer log){
+        this.log = log;
+        super(null);
+    }
+    this(ControllerLogData log){
+        this(new ControllerLogPlayer(log));
+    }
+    override void update(){
+        this.attack .update(log.attack.play);
+        this.shoot  .update(log.shoot .play);
+        this.power  .update(log.power .play);
+        this.guard  .update(log.guard .play);
+        this.left   .update(log.left  .play);
+        this.right  .update(log.right .play);
+        this.up     .update(log.up    .play);
+        this.down   .update(log.down  .play);
+    }
+}
+private class ControllerLogPlayer{
+    InputLogPlayer attack;
+    InputLogPlayer shoot;
+    InputLogPlayer power;
+    InputLogPlayer guard;
+    InputLogPlayer left;
+    InputLogPlayer right;
+    InputLogPlayer up;
+    InputLogPlayer down;
+    this(YamlNode yn){
+        //this.attack = new InputLogPlayer;
+        //this.shoot  = new InputLogPlayer;
+        //this.power  = new InputLogPlayer;
+        //this.guard  = new InputLogPlayer;
+        this.left   = load_input_log(yn["left" ]);
+        this.right  = load_input_log(yn["right"]);
+        this.up     = load_input_log(yn["up"   ]);
+        this.down   = load_input_log(yn["down" ]);
+    }
+    this(Controller ctr){
+        this.attack = new InputLogPlayer(ctr.attack.log);
+        this.shoot  = new InputLogPlayer(ctr.shoot .log);
+        this.power  = new InputLogPlayer(ctr.power .log);
+        this.guard  = new InputLogPlayer(ctr.guard .log);
+        this.left   = new InputLogPlayer(ctr.left  .log);
+        this.right  = new InputLogPlayer(ctr.right .log);
+        this.up     = new InputLogPlayer(ctr.up    .log);
+        this.down   = new InputLogPlayer(ctr.down  .log);
+    }
+    this(ControllerLogData cld){
+        this.attack = new InputLogPlayer(cld["attack"]);
+        this.shoot  = new InputLogPlayer(cld["shoot" ]);
+        this.power  = new InputLogPlayer(cld["power" ]);
+        this.guard  = new InputLogPlayer(cld["guard" ]);
+        try{
+        this.left   = new InputLogPlayer(cld["left"  ]);
+        this.right  = new InputLogPlayer(cld["right" ]);
+        this.up     = new InputLogPlayer(cld["up"    ]);
+        this.down   = new InputLogPlayer(cld["down"  ]);
+        }catch(Throwable o){
+            writeln(o);
+        }
+    }
+}

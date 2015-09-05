@@ -1,0 +1,3 @@
+name    , title                , author , path     , loop , loopBegin , loopEnd , bps
+music_a , """星々輝く夜"""     , Yakoi      , hoshi.ogg , true , 10480     , 115340  , 103
+music_b , """やみにたゆたう""" , Yakoi      , yami.ogg , true , 24920     , 91380   , 130

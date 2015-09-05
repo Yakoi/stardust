@@ -1,0 +1,1 @@
+setting:    iconId:           1    fullScreen:       false    emulation320x240: true    screenWidth:      320    screenHeight:     240    screenSize:       1    #font_name:        "BDF M+"    #font_path:        "bdfmplus.ttf"    fontSize:        12    font_thickness:   1    caption:          "STARDUST"

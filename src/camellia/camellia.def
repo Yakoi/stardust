@@ -1,0 +1,6 @@
+LIBRARY     CAMELLIA
+
+EXPORTS
+    _Camellia_DecryptBlock = Camellia_DecryptBlock
+    _Camellia_Ekeygen      = Camellia_Ekeygen
+    _Camellia_EncryptBlock = Camellia_EncryptBlock

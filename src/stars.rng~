@@ -1,0 +1,20 @@
+start = element stars{
+    attribute signature{ text },
+    attribute version{ text }?,
+    (element star { star })*
+}
+
+star = 
+    element pos{
+        element x{ xsd:float },
+        element y{ xsd:float }
+    },
+    element color {
+        element red  { xsd:integer },
+        element green{ xsd:integer },
+        element blue { xsd:integer }
+    },
+    element size  { xsd:integer },
+    element power { xsd:integer },
+    element date  { text }?,
+    element info  { text }?

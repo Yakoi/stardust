@@ -1,0 +1,5 @@
+mylib\encoder.obj+mylib\camelliaencoder.obj+camellia\all.obj+camellia\camellia.obj
+mylib\encoder.exe
+mylib\encoder.map
+camellia.lib
+mylib\encoder.def/noi/map

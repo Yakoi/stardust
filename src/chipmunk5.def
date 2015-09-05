@@ -1,0 +1,217 @@
+LIBRARY     CHIPMUNK5
+
+EXPORTS
+    ?apply_bias_impulses@@YGXPAUcpBody@@0UcpVect@@11@Z @1   
+    ?apply_impulses@@YGXPAUcpBody@@0UcpVect@@11@Z @2   
+    ?bbFromCircle@@YG?AUcpBB@@UcpVect@@N@Z @3   
+    ?clamp_vect@@YG?AUcpVect@@U1@N@Z @4   
+    ?clearHashCell@@YGXPAUcpSpaceHash@@H@Z @5   
+    ?containsHandle@@YGHPAUcpSpaceHashBin@@PAUcpHandle@@@Z @6   
+    ?cpHandleFree@@YGXPAUcpHandle@@@Z @7   
+    ?cpHandleRelease@@YGXPAUcpHandle@@@Z @8   
+    ?cpHandleRetain@@YGXPAUcpHandle@@@Z @9   
+    ?findMSA@@YGHPAUcpPolyShape@@PAUcpPolyShapeAxis@@HPAN@Z @10  
+    ?findPointsBehindSeg@@YGXPAPAUcpContact@@PAH1PAUcpSegmentShape@@PAUcpPolyShape@@NN@Z @11  
+    ?findVerts@@YGHPAPAUcpContact@@PAUcpPolyShape@@1UcpVect@@N@Z @12  
+    ?floor_int@@YGHN@Z             @13  
+    ?getEmptyBin@@YGPAUcpSpaceHashBin@@PAUcpSpaceHash@@@Z @14  
+    ?grooveConstrain@@YG?AUcpVect@@PAUcpGrooveJoint@@U1@@Z @15  
+    ?hashHandle@@YGXPAUcpSpaceHash@@PAUcpHandle@@UcpBB@@@Z @16  
+    ?hash_func@@YGIIII@Z           @17  
+    ?k_scalar@@YGNPAUcpBody@@0UcpVect@@11@Z @18  
+    ?k_tensor@@YGXPAUcpBody@@0UcpVect@@1PAU2@2@Z @19  
+    ?mult_k@@YG?AUcpVect@@U1@00@Z  @20  
+    ?next_prime@@YGHH@Z            @21  
+    ?normal_relative_velocity@@YGNPAUcpBody@@0UcpVect@@11@Z @22  
+    ?query@@YGXPAUcpSpaceHash@@PAUcpSpaceHashBin@@PAXP6GX222@Z2@Z @23  
+    ?queryReject@@YGHPAUcpShape@@0@Z @24  
+    ?relative_velocity@@YG?AUcpVect@@PAUcpBody@@0U1@1@Z @25  
+    ?segValueOnAxis@@YGNPAUcpSegmentShape@@UcpVect@@N@Z @26  
+    ?segmentQuery@@YGNPAUcpSpaceHash@@PAUcpSpaceHashBin@@PAXP6GN222@Z2@Z @27  
+    _cpApplyDampedSpring@72
+    _cpArbiterGetNormal@8
+    _cpArbiterGetPoint@8
+    _cpArbiterGetShapes@12
+    _cpArbiterIsFirstContact@4
+    _cpBBNew@32
+    _cpBBcontainsBB@64
+    _cpBBcontainsVect@48
+    _cpBBexpand@48
+    _cpBBintersects@64
+    _cpBBmerge@64
+    _cpBodyAlloc@0
+    _cpBodyApplyBiasImpulse@36
+    _cpBodyApplyForce@36
+    _cpBodyApplyImpulse@36
+    _cpBodyDestroy@4
+    _cpBodyFree@4
+    _cpBodyGetAngVel@4
+    _cpBodyGetAngVelLimit@4
+    _cpBodyGetAngle@4
+    _cpBodyGetForce@4
+    _cpBodyGetMass@4
+    _cpBodyGetMoment@4
+    _cpBodyGetPos@4
+    _cpBodyGetRot@4
+    _cpBodyGetTorque@4
+    _cpBodyGetVel@4
+    _cpBodyGetVelLimit@4
+    _cpBodyInit@20
+    _cpBodyLocal2World@20
+    _cpBodyNew@16
+    _cpBodyResetForces@4
+    _cpBodySetAngVel@12
+    _cpBodySetAngVelLimit@12
+    _cpBodySetForce@20
+    _cpBodySetMass@12
+    _cpBodySetMoment@12
+    _cpBodySetPos@20
+    _cpBodySetTorque@12
+    _cpBodySetVel@20
+    _cpBodySetVelLimit@12
+    _cpBodySlew@28
+    _cpBodyUpdatePosition@12
+    _cpBodyUpdateVelocity@36
+    _cpBodyWorld2Local@20
+    _cpCircleShapeAlloc@0
+    _cpCircleShapeInit@32
+    _cpCircleShapeNew@28
+    _cpConstraintCheckCast@8
+    _cpConstraintDestroy@4
+    _cpConstraintFree@4
+    _cpDampedRotarySpringGetDamping@4
+    _cpDampedRotarySpringGetRestAngle@4
+    _cpDampedRotarySpringGetSpringTorqueFunc@4
+    _cpDampedRotarySpringGetStiffness@4
+    _cpDampedRotarySpringSetDamping@12
+    _cpDampedRotarySpringSetRestAngle@12
+    _cpDampedRotarySpringSetSpringTorqueFunc@8
+    _cpDampedRotarySpringSetStiffness@12
+    _cpDampedSpringGetAnchr1@4
+    _cpDampedSpringGetAnchr2@4
+    _cpDampedSpringGetDamping@4
+    _cpDampedSpringGetRestLength@4
+    _cpDampedSpringGetSpringForceFunc@4
+    _cpDampedSpringGetStiffness@4
+    _cpDampedSpringSetAnchr1@20
+    _cpDampedSpringSetAnchr2@20
+    _cpDampedSpringSetDamping@12
+    _cpDampedSpringSetRestLength@12
+    _cpDampedSpringSetSpringForceFunc@8
+    _cpDampedSpringSetStiffness@12
+    _cpGearJointGetPhase@4
+    _cpGearJointGetRatio@4
+    _cpGearJointSetPhase@12
+    _cpGrooveJointGetAnchr2@4
+    _cpGrooveJointSetAnchr2@20
+    _cpInitChipmunk@0
+    _cpMomentForCircle@40
+    _cpMomentForPoly@32
+    _cpMomentForSegment@40
+    _cpPinJointGetAnchr1@4
+    _cpPinJointGetAnchr2@4
+    _cpPinJointGetDist@4
+    _cpPinJointSetAnchr1@20
+    _cpPinJointSetAnchr2@20
+    _cpPinJointSetDist@12
+    _cpPivotJointGetAnchr1@4
+    _cpPivotJointGetAnchr2@4
+    _cpPivotJointSetAnchr1@20
+    _cpPivotJointSetAnchr2@20
+    _cpPolyShapeContainsVert@20
+    _cpPolyShapeContainsVertPartial@36
+    _cpPolyShapeValueOnAxis@28
+    _cpRatchetJointGetAngle@4
+    _cpRatchetJointGetPhase@4
+    _cpRatchetJointGetRatchet@4
+    _cpRatchetJointSetAngle@12
+    _cpRatchetJointSetPhase@12
+    _cpRatchetJointSetRatchet@12
+    _cpResetShapeIdCounter@0
+    _cpRotaryLimitJointGetMax@4
+    _cpRotaryLimitJointGetMin@4
+    _cpRotaryLimitJointSetMax@12
+    _cpRotaryLimitJointSetMin@12
+    _cpSegmentQueryHitDist@64
+    _cpSegmentQueryHitPoint@64
+    _cpSegmentQueryInfoPrint@4
+    _cpSegmentShapeAlloc@0
+    _cpSegmentShapeInit@48
+    _cpSegmentShapeNew@44
+    _cpShapeCacheBB@4
+    _cpShapeDestroy@4
+    _cpShapeFree@4
+    _cpShapeInit@12
+    _cpShapePointQuery@20
+    _cpShapeSegmentQuery@40
+    _cpSimpleMotorGetRate@4
+    _cpSimpleMotorSetRate@12
+    _cpSlideJointGetAnchr1@4
+    _cpSlideJointGetAnchr2@4
+    _cpSlideJointGetMax@4
+    _cpSlideJointGetMin@4
+    _cpSlideJointSetAnchr1@20
+    _cpSlideJointSetAnchr2@20
+    _cpSlideJointSetMax@12
+    _cpSlideJointSetMin@12
+    _cpSpaceAddBody@8
+    _cpSpaceAddCollisionHandler@32
+    _cpSpaceAddConstraint@8
+    _cpSpaceAddPostStepCallback@16
+    _cpSpaceAddShape@8
+    _cpSpaceAddStaticShape@8
+    _cpSpaceAlloc@0
+    _cpSpaceBBQuery@52
+    _cpSpaceDestroy@4
+    _cpSpaceEachBody@12
+    _cpSpaceFree@4
+    _cpSpaceFreeChildren@4
+    _cpSpaceInit@4
+    _cpSpaceNew@0
+    _cpSpacePointQuery@36
+    _cpSpacePointQueryFirst@28
+    _cpSpaceRehashStatic@4
+    _cpSpaceRemoveBody@8
+    _cpSpaceRemoveCollisionHandler@12
+    _cpSpaceRemoveConstraint@8
+    _cpSpaceRemoveShape@8
+    _cpSpaceRemoveStaticShape@8
+    _cpSpaceResizeActiveHash@16
+    _cpSpaceResizeStaticHash@16
+    _cpSpaceSegmentQuery@52
+    _cpSpaceSegmentQueryFirst@48
+    _cpSpaceSetDefaultCollisionHandler@24
+    _cpSpaceStep@12
+    _cpfabs@8
+    _cpfclamp@24
+    _cpflerp@24
+    _cpflerpconst@24
+    _cpfmax@16
+    _cpfmin@16
+    _cpv@16
+    _cpvadd@32
+    _cpvclamp@24
+    _cpvcross@32
+    _cpvdist@32
+    _cpvdistsq@32
+    _cpvdot@32
+    _cpvforangle@8
+    _cpvlength@16
+    _cpvlengthsq@16
+    _cpvlerp@40
+    _cpvlerpconst@40
+    _cpvmult@24
+    _cpvnear@40
+    _cpvneg@16
+    _cpvnormalize@16
+    _cpvnormalize_safe@16
+    _cpvperp@16
+    _cpvproject@32
+    _cpvrotate@32
+    _cpvrperp@16
+    _cpvslerp@40
+    _cpvslerpconst@40
+    _cpvstr@16
+    _cpvsub@32
+    _cpvtoangle@16
+    _cpvunrotate@32

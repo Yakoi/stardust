@@ -1,0 +1,1 @@
+bud stardust stardust.rc -w -release -O -inline -gui -clean -full
